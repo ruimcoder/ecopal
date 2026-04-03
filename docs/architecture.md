@@ -86,19 +86,19 @@ graph TD
 
 ## IUCN Colour Mapping
 
-| IUCN Code | Category | App Colour | Meaning |
-|---|---|---|---|
-| `LC` | Least Concern | 🟢 Green | Safe to consume |
-| `NT` | Near Threatened | 🟡 Yellow | Some concern |
-| `VU` | Vulnerable | 🟡 Yellow | Some concern |
-| `EN` | Endangered | 🔴 Red | Do not buy |
-| `CR` | Critically Endangered | 🔴 Red | Do not buy |
-| `EW` | Extinct in the Wild | 🔴 Red | Do not buy |
-| `EX` | Extinct | 🔴 Red | Do not buy |
-| `DD` | Data Deficient | ⚫ Grey | Insufficient data |
-| `NE` | Not Evaluated | ⚫ Grey | Insufficient data |
+> ⚠️ **Updated:** Primary status source is now **Seafood Watch** (not IUCN Red List). See [ADR-004](adr/004-conservation-data-sources.md).
 
-> **Accessibility:** Colour alone is never the sole indicator. Each bounding box also displays an icon and text label (e.g. "ENDANGERED") for colour-blind users. See NFRs.
+| Seafood Watch Rating | App Colour | Hex | Meaning |
+|---|---|---|---|
+| Best Choice | 🟢 Green | `#4CAF50` | Well managed, low impact — safe to buy |
+| Good Alternative | 🟡 Amber | `#FFC107` | Some concerns — buy less often |
+| Avoid | 🔴 Red | `#F44336` | Overfished or harmful to ecosystem |
+| Not Rated | ⚫ Grey | `#9E9E9E` | Insufficient data |
+
+Additional overlay badges (independent of primary colour):
+- **CITES badge** — species subject to international trade controls
+- **MSC badge** — fishery is MSC-certified sustainable
+- **OSPAR/HELCOM badge** — regionally threatened species (NE Atlantic / Baltic)
 
 ---
 

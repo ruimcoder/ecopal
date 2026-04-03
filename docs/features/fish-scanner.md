@@ -41,26 +41,27 @@ Each detected fish renders a bounding box with:
 
 | Element | Detail |
 |---|---|
-| **Box border colour** | IUCN category colour (see table below) |
+| **Box border colour** | Primary rating colour (see table below) |
 | **Box fill** | Colour at 20% opacity |
 | **Label: Scientific name** | Italic, small font, top of box |
 | **Label: Common name** | Bold, medium font, below scientific name; localised to device language |
-| **Label: Threat level** | Uppercase text badge (e.g. "ENDANGERED"); colour matches box |
+| **Label: Rating** | Consumer-friendly text (e.g. "AVOID" / "GOOD ALTERNATIVE" / "BEST CHOICE"); colour matches box |
 | **Icon** | Accessibility icon (⚠️ / ✅ / ❓) — not colour-only |
+| **Badges (optional)** | CITES trade badge, MSC certification badge, OSPAR/HELCOM regional badge |
 
-#### IUCN Colour Reference
+#### Primary Rating Colour Reference (Seafood Watch)
 
-| Code | Category | Colour | Hex |
+| Rating | Colour | Hex | Meaning |
 |---|---|---|---|
-| `LC` | Least Concern | Green | `#4CAF50` |
-| `NT` | Near Threatened | Amber | `#FFC107` |
-| `VU` | Vulnerable | Amber | `#FFC107` |
-| `EN` | Endangered | Red | `#F44336` |
-| `CR` | Critically Endangered | Red | `#F44336` |
-| `EW` | Extinct in the Wild | Red | `#F44336` |
-| `EX` | Extinct | Red | `#F44336` |
-| `DD` | Data Deficient | Grey | `#9E9E9E` |
-| `NE` | Not Evaluated | Grey | `#9E9E9E` |
+| Best Choice | 🟢 Green | `#4CAF50` | Well managed, low environmental impact |
+| Good Alternative | 🟡 Amber | `#FFC107` | Some concerns — buy less often |
+| Avoid | 🔴 Red | `#F44336` | Overfished or caught/farmed in harmful ways |
+| Not Rated | ⚫ Grey | `#9E9E9E` | Insufficient data for this species |
+
+> **Data source:** Seafood Watch (Monterey Bay Aquarium) — commercial license required before release.  
+> **Fallback:** FishBase Vulnerability Index (0–100) if Seafood Watch license is refused.  
+> **Do NOT use:** IUCN Red List API, GBIF IUCN endpoint, or FishBase `IUCN_status` field — all are commercially restricted.  
+> See [ADR-004](../adr/004-conservation-data-sources.md) for full rationale.
 
 ### FR-04: Multi-language support
 - Common names displayed in the **device locale language** (ISO 639-1).
@@ -264,11 +265,13 @@ Filter: iconic_taxon_name === "Actinopterygii"
 
 | # | Risk | Severity | Mitigation |
 |---|---|---|---|
-| 1 | IUCN commercial licensing required for app store release | 🔴 High | Contact redlist@iucn.org early; may require IBAT subscription |
+| 1 | Seafood Watch commercial license refused | 🔴 High | Use FishBase Vulnerability Index as fallback; contact MBA early with conservation mission argument |
 | 2 | On-device model accuracy for dead/processed fish | 🔴 High | Collect supermarket-specific training data; budget for data labelling |
-| 3 | iNaturalist `score_image` is undocumented; may change | 🟡 Medium | Monitor; fallback to "unknown" gracefully; investigate official alternatives |
-| 4 | FishBase rOpenSci instance reliability | 🟡 Medium | Pre-seeded cache mitigates; monitor uptime |
-| 5 | Model size impact on APK size | 🟢 Low | Use dynamic delivery (Play Asset Delivery) if model exceeds 20MB |
+| 3 | CITES commercial clearance refused | 🟡 Medium | Use OSPAR/HELCOM static lists (CC BY) as free regional fallback; accept narrower coverage |
+| 4 | iNaturalist `score_image` is undocumented; may change | 🟡 Medium | Monitor; fallback gracefully to "unknown"; investigate official alternatives |
+| 5 | FishBase rOpenSci instance reliability | 🟡 Medium | Pre-seeded cache mitigates; monitor uptime |
+| 6 | Model size impact on APK size | 🟢 Low | Use Play Asset Delivery if model exceeds 20MB |
+| 7 | **DO NOT USE: IUCN Red List API / GBIF IUCN endpoint / FishBase `IUCN_status` field** | 🔴 Legal | Prohibited for commercial use without expensive IBAT subscription. See ADR-004 |
 
 ---
 
