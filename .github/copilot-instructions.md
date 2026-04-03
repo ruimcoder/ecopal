@@ -130,6 +130,7 @@ Tech stack TBD — update this file once framework decisions are made. Include b
 
 ---
 
+<<<<<<< Updated upstream
 ---
 
 ## Jarvis PR Review Process
@@ -242,6 +243,40 @@ A `prototype` branch is maintained as the always-installable demo build:
 > This section is updated by Jarvis after every PR review cycle. Patterns discovered during code review are recorded here so every agent benefits.
 
 *(No patterns yet — this section grows as the codebase is built.)*
+=======
+## Learned Patterns
+
+These are real bugs found during PR reviews. Every agent must apply these patterns proactively — never repeat a known mistake.
+
+### LP-001 — Idempotency must not bypass validation (PR #38, 2025)
+**Context:** ML data collection script skipped license validation for already-downloaded images.  
+**Rule:** Idempotency checks (skip-if-exists) must NEVER bypass correctness or compliance checks. Persist validation metadata (e.g. `licenses.json`) and re-validate on every run. Delete/quarantine items that no longer comply.  
+**Applies to:** Any script with download caching, database seeding, or skip-if-exists logic.
+
+### LP-002 — CC-BY-NC requires explicit non-commercial confirmation (PR #38, 2025)
+**Context:** Script marked CC-BY-NC as "OK for EcoPal" without documenting the non-commercial basis.  
+**Rule:** Any time `cc-by-nc` licensed content is used, add an explicit code comment and README note stating the confirmed non-commercial justification. If there is any commercial deployment path, use only CC0 or CC-BY.  
+**Applies to:** All data collection scripts, asset pipelines, and third-party content.
+
+### LP-003 — Always validate downloaded files (PR #38, 2025)
+**Context:** Image download script wrote bytes to disk but never verified the resulting file was a valid image. Pillow was in requirements.txt but never imported.  
+**Rule:** After downloading any binary file (image, model, asset), validate it with the appropriate library (e.g. `PIL.Image.open(path).verify()` for images). On failure, delete the partial file and log a warning. Never assume a successful HTTP response means a valid file.  
+**Applies to:** All download scripts, asset fetchers, model downloaders.
+
+---
+
+## GitHub Labels
+
+| Label | Use |
+|---|---|
+| `feature` | New capability |
+| `setup` | Project setup / config |
+| `architecture` | Architecture decisions |
+| `documentation` | Docs only |
+| `mobile` | Mobile-specific work |
+| `bug` | Defect |
+| `code-review` | PR needs changes from Jarvis review |
+>>>>>>> Stashed changes
 
 ---
 
