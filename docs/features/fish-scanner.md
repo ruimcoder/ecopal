@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Fish Scanner is ecopal's MVP skill. A user points their phone camera at a fish counter (supermarket, market, fishmonger) and the app identifies fish species in real time. Each identified fish is highlighted with a colour-coded bounding box indicating its IUCN Red List conservation status, along with its scientific name, common name (in the user's language), and threat level label.
+The Fish Scanner is ecopal's MVP skill. A user points their phone camera at a fish counter (supermarket, market, fishmonger) and the app identifies fish species in real time. Each identified fish is highlighted with a colour-coded bounding box indicating its Seafood Watch sustainability rating, along with its scientific name, common name (in the user's language), and threat level label.
 
 ---
 
@@ -72,9 +72,9 @@ Each detected fish renders a bounding box with:
 ### FR-05: Species detail panel
 - Tapping a bounding box opens a **bottom sheet** with:
   - Full species name (scientific + common)
-  - IUCN status with full category name
+  - Seafood Watch rating with full category name
   - Brief ecology note (e.g. habitat, region)
-  - Link to IUCN Red List species page
+  - Link to Seafood Watch species page
   - "Why this matters" section (1–2 sentences; ecologically grounded)
 
 ### FR-06: Offline mode
@@ -111,10 +111,10 @@ Each detected fish renders a bounding box with:
 |---|---|
 | Camera frames not stored | Frames processed in memory only; never written to disk |
 | Cloud fallback opt-in | User explicitly consents to sending cropped images to iNaturalist in onboarding |
-| No API keys in binary | IUCN token proxied via a minimal backend function (Cloud Function / Supabase Edge Function) |
+| No API keys in binary | Seafood Watch API key proxied via a minimal backend function (Cloud Function / Supabase Edge Function) |
 | No user tracking by default | No analytics without explicit opt-in |
 | HTTPS only | Certificate pinning for ecopal backend endpoints |
-| IUCN commercial licence | Must be obtained before any commercial app store release |
+| Seafood Watch commercial licence | Must be obtained before any commercial app store release |
 
 ### Accessibility
 - Bounding boxes use both **colour AND icon AND text** — never colour alone.
@@ -142,7 +142,7 @@ flowchart TD
     B -->|confidence ≥ 0.75| C[SpeciesLookupService]
     B -->|confidence < 0.75 + network| D[iNaturalistAdapter\ncloud fallback]
     D --> C
-    C -->|cache miss| E[IUCNAdapter]
+    C -->|cache miss| E[SeafoodWatchAdapter]
     C -->|cache miss| F[FishBaseAdapter]
     E --> G[(SQLite Cache)]
     F --> G
@@ -165,10 +165,10 @@ lib/
         species_detail_sheet.dart     # Bottom sheet on tap
       services/
         fish_detection_service.dart   # TFLite inference + iNat fallback
-        species_lookup_service.dart   # Cache + IUCN + FishBase orchestration
+        species_lookup_service.dart   # Cache + Seafood Watch + FishBase orchestration
         i18n_service.dart             # Common name localisation
       adapters/
-        iucn_adapter.dart             # IUCN REST API client
+        seafood_watch_adapter.dart    # Seafood Watch REST API client
         fishbase_adapter.dart         # FishBase REST API client
         inaturalist_adapter.dart      # iNaturalist Vision API client
       models/
@@ -235,11 +235,7 @@ enum IucnCategory {
 
 ## API Contracts
 
-### IUCN Red List
-```
-GET https://apiv3.iucnredlist.org/api/v3/species/name/{scientificName}?token={token}
-→ { result: [{ category: "EN", ... }] }
-```
+> Conservation data is sourced from Seafood Watch API — see [ADR-004](../adr/004-conservation-data-sources.md) for full contract.
 
 ### FishBase Common Names
 ```
@@ -282,7 +278,7 @@ See GitHub milestone **MVP - Fish Scanner**:
 - [ ] [Camera integration + frame capture](#) *(issue to be created)*
 - [ ] [TFLite model integration + inference isolate](#) *(issue to be created)*
 - [ ] [Species overlay renderer (CustomPainter)](#) *(issue to be created)*
-- [ ] [IUCN API adapter + SQLite cache](#) *(issue to be created)*
+- [ ] [Seafood Watch API adapter + SQLite cache](#) *(issue to be created)*
 - [ ] [FishBase API adapter + common names](#) *(issue to be created)*
 - [ ] [Pre-seeded species database (build pipeline)](#) *(issue to be created)*
 - [ ] [Multi-language / i18n setup](#) *(issue to be created)*

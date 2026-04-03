@@ -1,7 +1,12 @@
+> ⚠️ **Status: Superseded by [ADR-004](./004-conservation-data-sources.md)**
+> The IUCN Red List API described in this ADR is commercially prohibited for ecopal's use case.
+> All conservation status data comes from Seafood Watch (primary), CITES, MSC, OSPAR, and HELCOM.
+> This document is retained for historical context only. **Do not implement anything in this ADR.**
+
 # ADR-003: Species Data Strategy (IUCN + FishBase)
 
 **Date:** 2026-04  
-**Status:** Accepted  
+**Status:** Superseded by ADR-004  
 **Deciders:** Product Lead, Jarvis (AI Copilot)
 
 ---

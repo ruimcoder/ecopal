@@ -17,13 +17,13 @@ ecopal is a mobile companion app that guides users toward eco-friendly choices. 
 graph TD
     User([👤 User])
     App["📱 ecopal\n(Flutter Mobile App)"]
-    IUCN["🌍 IUCN Red List API\napiv3.iucnredlist.org"]
+    SeafoodWatch["🐟 Seafood Watch API\napi.seafoodwatch.org"]
     FishBase["🐟 FishBase REST API\nfishbase.ropensci.org"]
     iNat["🔬 iNaturalist Vision API\napi.inaturalist.org"]
     Backend["☁️ ecopal Backend\n(future: species cache service)"]
 
     User -->|Points camera at fish| App
-    App -->|Species lookup| IUCN
+    App -->|Species lookup| SeafoodWatch
     App -->|Common names + localisation| FishBase
     App -->|Cloud species ID fallback| iNat
     App <-->|Cached data sync| Backend
@@ -43,7 +43,7 @@ graph TD
             CameraCtrl["Camera Controller\n(frame capture)"]
             MLEngine["ML Engine\n(on-device TFLite)"]
             OverlayRenderer["Overlay Renderer\n(CustomPainter)"]
-            SpeciesService["Species Service\n(IUCN + FishBase)"]
+            SpeciesService["Species Service\n(Seafood Watch + FishBase)"]
             I18n["i18n Service\n(multi-language)"]
         end
 
@@ -52,7 +52,7 @@ graph TD
 
     subgraph External Services
         TFLiteModel["TFLite Model\n(bundled + updatable)"]
-        IUCNApi["IUCN Red List API"]
+        SeafoodWatchApi["Seafood Watch API"]
         FishBaseApi["FishBase REST API"]
         iNatApi["iNaturalist Vision API\n(cloud fallback)"]
     end
@@ -63,7 +63,7 @@ graph TD
     MLEngine -->|species candidates + confidence| OverlayRenderer
     MLEngine -->|low confidence fallback| iNatApi
     OverlayRenderer --> SpeciesService
-    SpeciesService -->|cache miss| IUCNApi
+    SpeciesService -->|cache miss| SeafoodWatchApi
     SpeciesService -->|cache miss| FishBaseApi
     SpeciesService <--> LocalCache
     MLEngine --> TFLiteModel
@@ -79,7 +79,7 @@ graph TD
 |---|---|
 | **Skill-based modularity** | Each app capability is a self-contained skill module. The skill router dispatches to the correct module. Adding a new skill does not touch existing skills. |
 | **Offline-first** | On-device ML model + local SQLite cache ensure core functionality works without a network connection. |
-| **Privacy by design** | Camera frames are never stored or transmitted. Species lookup uses scientific name only (no image sent to IUCN/FishBase). Images are only sent to iNaturalist as an opt-in fallback when on-device confidence is low. |
+| **Privacy by design** | Camera frames are never stored or transmitted. Species lookup uses scientific name only (no image sent to Seafood Watch/FishBase). Images are only sent to iNaturalist as an opt-in fallback when on-device confidence is low. |
 | **Evolutionary design** | The backend is optional for the MVP (direct API calls from app). When usage scales, a caching proxy service is inserted without changing the mobile app's interfaces. |
 
 ---
@@ -108,7 +108,7 @@ Additional overlay badges (independent of primary colour):
 |---|---|---|
 | Mobile framework | Flutter (Android-first, iOS-ready) | [ADR-001](adr/001-cross-platform-framework.md) |
 | ML inference strategy | On-device TFLite + iNaturalist cloud fallback | [ADR-002](adr/002-ml-inference-strategy.md) |
-| Species data strategy | FishBase (names) + IUCN (status) + local SQLite cache | [ADR-003](adr/003-species-data-strategy.md) |
+| Species data strategy | FishBase (names) + Seafood Watch (status) + local SQLite cache | [ADR-004](adr/004-conservation-data-sources.md) |
 
 ---
 
@@ -128,7 +128,7 @@ graph LR
     TFModel -->|embedded| CI
 ```
 
-For the MVP, the app communicates directly with IUCN and FishBase APIs. No ecopal backend is required. The backend service will be introduced when:
+For the MVP, the app communicates directly with Seafood Watch and FishBase APIs. No ecopal backend is required. The backend service will be introduced when:
 - API rate limits require a caching proxy
 - A custom ML model serving endpoint is needed
 - User accounts / preferences are added
