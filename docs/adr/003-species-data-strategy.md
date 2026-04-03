@@ -24,12 +24,8 @@ Both are available via REST APIs, but neither is designed for real-time, per-fra
 ## Data Sources
 
 ### IUCN Red List API
-- **Base URL:** `https://apiv3.iucnredlist.org/api/v3/`
-- **Auth:** Free token (register at apiv3.iucnredlist.org)
-- **Key endpoint:** `GET /species/name/{scientific_name}?token=...`
-- **Returns:** Category code (LC, NT, VU, EN, CR, EW, EX, DD, NE)
-- **Rate limits:** No published hard limit; 2s+ between requests recommended
-- **⚠️ Licensing:** Free for non-commercial/conservation/educational use. **Commercial use requires written IUCN permission** (channel: IBAT). This must be resolved before any commercial app store release.
+> ⚠️ **DO NOT IMPLEMENT** — Commercially restricted without written IUCN/IBAT permission.
+> All implementation details have been removed. See [ADR-004](./004-conservation-data-sources.md) for approved data sources.
 
 ### FishBase REST API (rOpenSci)
 - **Base URL:** `https://fishbase.ropensci.org/`
@@ -97,11 +93,11 @@ CREATE TABLE common_names (
 
 ## Decision
 
-- Use **IUCN Red List API** for conservation status, cached in local SQLite with 7-day TTL.
+- ~~Use **IUCN Red List API** for conservation status~~ — **Superseded. Use Seafood Watch API per ADR-004.**
 - Use **FishBase rOpenSci REST API** for common names, cached indefinitely per app version.
 - Ship a **pre-seeded SQLite database** in the APK covering the 200 most common commercial species.
 - Cache-first lookup: API only called on cache miss or TTL expiry.
-- **Resolve IUCN commercial licensing before app store release.**
+- ~~**Resolve IUCN commercial licensing before app store release.**~~ — **Resolved by adopting Seafood Watch. See ADR-004.**
 
 ---
 
