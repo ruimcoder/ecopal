@@ -1,0 +1,566 @@
+{
+  "version": "1.0",
+  "description": "Top 80 commercially traded fish species for EcoPal ML model training",
+  "species": [
+    {
+      "id": 0,
+      "scientific_name": "Salmo salar",
+      "common_name_en": "Atlantic Salmon",
+      "fishbase_code": 236,
+      "inat_taxon_id": 61380
+    },
+    {
+      "id": 1,
+      "scientific_name": "Gadus morhua",
+      "common_name_en": "Atlantic Cod",
+      "fishbase_code": 69,
+      "inat_taxon_id": 81017
+    },
+    {
+      "id": 2,
+      "scientific_name": "Thunnus thynnus",
+      "common_name_en": "Atlantic Bluefin Tuna",
+      "fishbase_code": 148,
+      "inat_taxon_id": 119196
+    },
+    {
+      "id": 3,
+      "scientific_name": "Thunnus albacares",
+      "common_name_en": "Yellowfin Tuna",
+      "fishbase_code": 144,
+      "inat_taxon_id": 119222
+    },
+    {
+      "id": 4,
+      "scientific_name": "Katsuwonus pelamis",
+      "common_name_en": "Skipjack Tuna",
+      "fishbase_code": 40637,
+      "inat_taxon_id": 199977
+    },
+    {
+      "id": 5,
+      "scientific_name": "Dicentrarchus labrax",
+      "common_name_en": "European Sea Bass",
+      "fishbase_code": 987,
+      "inat_taxon_id": 61455
+    },
+    {
+      "id": 6,
+      "scientific_name": "Sparus aurata",
+      "common_name_en": "Gilthead Sea Bream",
+      "fishbase_code": 1373,
+      "inat_taxon_id": 97066
+    },
+    {
+      "id": 7,
+      "scientific_name": "Scomber scombrus",
+      "common_name_en": "Atlantic Mackerel",
+      "fishbase_code": 211,
+      "inat_taxon_id": 82496
+    },
+    {
+      "id": 8,
+      "scientific_name": "Clupea harengus",
+      "common_name_en": "Atlantic Herring",
+      "fishbase_code": 200,
+      "inat_taxon_id": 69166
+    },
+    {
+      "id": 9,
+      "scientific_name": "Sardina pilchardus",
+      "common_name_en": "European Pilchard (Sardine)",
+      "fishbase_code": 1356,
+      "inat_taxon_id": 82618
+    },
+    {
+      "id": 10,
+      "scientific_name": "Merluccius merluccius",
+      "common_name_en": "European Hake",
+      "fishbase_code": 348,
+      "inat_taxon_id": 82491
+    },
+    {
+      "id": 11,
+      "scientific_name": "Xiphias gladius",
+      "common_name_en": "Swordfish",
+      "fishbase_code": 733,
+      "inat_taxon_id": 49643
+    },
+    {
+      "id": 12,
+      "scientific_name": "Solea solea",
+      "common_name_en": "Common Sole",
+      "fishbase_code": 1384,
+      "inat_taxon_id": 82601
+    },
+    {
+      "id": 13,
+      "scientific_name": "Pleuronectes platessa",
+      "common_name_en": "European Plaice",
+      "fishbase_code": 1271,
+      "inat_taxon_id": 82492
+    },
+    {
+      "id": 14,
+      "scientific_name": "Hippoglossus hippoglossus",
+      "common_name_en": "Atlantic Halibut",
+      "fishbase_code": 442,
+      "inat_taxon_id": 82598
+    },
+    {
+      "id": 15,
+      "scientific_name": "Scophthalmus maximus",
+      "common_name_en": "Turbot",
+      "fishbase_code": 1386,
+      "inat_taxon_id": 82603
+    },
+    {
+      "id": 16,
+      "scientific_name": "Oncorhynchus mykiss",
+      "common_name_en": "Rainbow Trout",
+      "fishbase_code": 239,
+      "inat_taxon_id": 60985
+    },
+    {
+      "id": 17,
+      "scientific_name": "Oreochromis niloticus",
+      "common_name_en": "Nile Tilapia",
+      "fishbase_code": 2,
+      "inat_taxon_id": 48437
+    },
+    {
+      "id": 18,
+      "scientific_name": "Pangasianodon hypophthalmus",
+      "common_name_en": "Pangasius",
+      "fishbase_code": 26375,
+      "inat_taxon_id": 323870
+    },
+    {
+      "id": 19,
+      "scientific_name": "Coryphaena hippurus",
+      "common_name_en": "Mahi-mahi",
+      "fishbase_code": 2751,
+      "inat_taxon_id": 49622
+    },
+    {
+      "id": 20,
+      "scientific_name": "Lutjanus campechanus",
+      "common_name_en": "Red Snapper",
+      "fishbase_code": 3495,
+      "inat_taxon_id": 319309
+    },
+    {
+      "id": 21,
+      "scientific_name": "Epinephelus marginatus",
+      "common_name_en": "Dusky Grouper",
+      "fishbase_code": 1443,
+      "inat_taxon_id": 372746
+    },
+    {
+      "id": 22,
+      "scientific_name": "Pollachius virens",
+      "common_name_en": "Pollock (Saithe)",
+      "fishbase_code": 73,
+      "inat_taxon_id": 82510
+    },
+    {
+      "id": 23,
+      "scientific_name": "Merlangius merlangus",
+      "common_name_en": "Whiting",
+      "fishbase_code": 350,
+      "inat_taxon_id": 82507
+    },
+    {
+      "id": 24,
+      "scientific_name": "Lophius piscatorius",
+      "common_name_en": "Monkfish",
+      "fishbase_code": 1210,
+      "inat_taxon_id": 64305
+    },
+    {
+      "id": 25,
+      "scientific_name": "Zeus faber",
+      "common_name_en": "John Dory",
+      "fishbase_code": 732,
+      "inat_taxon_id": 82612
+    },
+    {
+      "id": 26,
+      "scientific_name": "Mullus surmuletus",
+      "common_name_en": "Red Mullet",
+      "fishbase_code": 1332,
+      "inat_taxon_id": 82494
+    },
+    {
+      "id": 27,
+      "scientific_name": "Salmo trutta",
+      "common_name_en": "Sea Trout",
+      "fishbase_code": 238,
+      "inat_taxon_id": 60977
+    },
+    {
+      "id": 28,
+      "scientific_name": "Salvelinus alpinus",
+      "common_name_en": "Arctic Char",
+      "fishbase_code": 247,
+      "inat_taxon_id": 61401
+    },
+    {
+      "id": 29,
+      "scientific_name": "Sprattus sprattus",
+      "common_name_en": "European Sprat",
+      "fishbase_code": 1357,
+      "inat_taxon_id": 82499
+    },
+    {
+      "id": 30,
+      "scientific_name": "Engraulis encrasicolus",
+      "common_name_en": "European Anchovy",
+      "fishbase_code": 1343,
+      "inat_taxon_id": 82613
+    },
+    {
+      "id": 31,
+      "scientific_name": "Mallotus villosus",
+      "common_name_en": "Capelin",
+      "fishbase_code": 207,
+      "inat_taxon_id": 199614
+    },
+    {
+      "id": 32,
+      "scientific_name": "Microstomus kitt",
+      "common_name_en": "Lemon Sole",
+      "fishbase_code": 1272,
+      "inat_taxon_id": 82506
+    },
+    {
+      "id": 33,
+      "scientific_name": "Limanda limanda",
+      "common_name_en": "Common Dab",
+      "fishbase_code": 1267,
+      "inat_taxon_id": 82608
+    },
+    {
+      "id": 34,
+      "scientific_name": "Scophthalmus rhombus",
+      "common_name_en": "Brill",
+      "fishbase_code": 1387,
+      "inat_taxon_id": 82604
+    },
+    {
+      "id": 35,
+      "scientific_name": "Cyprinus carpio",
+      "common_name_en": "Common Carp",
+      "fishbase_code": 1461,
+      "inat_taxon_id": 48444
+    },
+    {
+      "id": 36,
+      "scientific_name": "Perca fluviatilis",
+      "common_name_en": "European Perch",
+      "fishbase_code": 1578,
+      "inat_taxon_id": 60543
+    },
+    {
+      "id": 37,
+      "scientific_name": "Sander lucioperca",
+      "common_name_en": "Pikeperch (Zander)",
+      "fishbase_code": 1595,
+      "inat_taxon_id": 60533
+    },
+    {
+      "id": 38,
+      "scientific_name": "Lates calcarifer",
+      "common_name_en": "Barramundi",
+      "fishbase_code": 6380,
+      "inat_taxon_id": 49642
+    },
+    {
+      "id": 39,
+      "scientific_name": "Lateolabrax japonicus",
+      "common_name_en": "Japanese Sea Bass",
+      "fishbase_code": 11153,
+      "inat_taxon_id": 356174
+    },
+    {
+      "id": 40,
+      "scientific_name": "Chanos chanos",
+      "common_name_en": "Milkfish",
+      "fishbase_code": 1039,
+      "inat_taxon_id": 66530
+    },
+    {
+      "id": 41,
+      "scientific_name": "Seriola lalandi",
+      "common_name_en": "Yellowtail Amberjack",
+      "fishbase_code": 6455,
+      "inat_taxon_id": 49613
+    },
+    {
+      "id": 42,
+      "scientific_name": "Seriola dumerili",
+      "common_name_en": "Greater Amberjack",
+      "fishbase_code": 6442,
+      "inat_taxon_id": 49611
+    },
+    {
+      "id": 43,
+      "scientific_name": "Anarhichas lupus",
+      "common_name_en": "Atlantic Wolffish",
+      "fishbase_code": 1026,
+      "inat_taxon_id": 82593
+    },
+    {
+      "id": 44,
+      "scientific_name": "Molva molva",
+      "common_name_en": "Ling",
+      "fishbase_code": 356,
+      "inat_taxon_id": 82617
+    },
+    {
+      "id": 45,
+      "scientific_name": "Brosme brosme",
+      "common_name_en": "Tusk (Cusk)",
+      "fishbase_code": 340,
+      "inat_taxon_id": 82503
+    },
+    {
+      "id": 46,
+      "scientific_name": "Micromesistius poutassou",
+      "common_name_en": "Blue Whiting",
+      "fishbase_code": 352,
+      "inat_taxon_id": 82509
+    },
+    {
+      "id": 47,
+      "scientific_name": "Trisopterus esmarkii",
+      "common_name_en": "Norway Pout",
+      "fishbase_code": 76,
+      "inat_taxon_id": 82511
+    },
+    {
+      "id": 48,
+      "scientific_name": "Ammodytes tobianus",
+      "common_name_en": "Small Sandeel",
+      "fishbase_code": 996,
+      "inat_taxon_id": 82619
+    },
+    {
+      "id": 49,
+      "scientific_name": "Trachurus trachurus",
+      "common_name_en": "Atlantic Horse Mackerel",
+      "fishbase_code": 440,
+      "inat_taxon_id": 82497
+    },
+    {
+      "id": 50,
+      "scientific_name": "Scomber japonicus",
+      "common_name_en": "Chub Mackerel",
+      "fishbase_code": 212,
+      "inat_taxon_id": 82498
+    },
+    {
+      "id": 51,
+      "scientific_name": "Sarda sarda",
+      "common_name_en": "Atlantic Bonito",
+      "fishbase_code": 2663,
+      "inat_taxon_id": 119199
+    },
+    {
+      "id": 52,
+      "scientific_name": "Thunnus alalunga",
+      "common_name_en": "Albacore Tuna",
+      "fishbase_code": 143,
+      "inat_taxon_id": 119221
+    },
+    {
+      "id": 53,
+      "scientific_name": "Thunnus obesus",
+      "common_name_en": "Bigeye Tuna",
+      "fishbase_code": 145,
+      "inat_taxon_id": 119223
+    },
+    {
+      "id": 54,
+      "scientific_name": "Auxis rochei",
+      "common_name_en": "Bullet Tuna",
+      "fishbase_code": 2665,
+      "inat_taxon_id": 199961
+    },
+    {
+      "id": 55,
+      "scientific_name": "Acanthocybium solandri",
+      "common_name_en": "Wahoo",
+      "fishbase_code": 2666,
+      "inat_taxon_id": 49649
+    },
+    {
+      "id": 56,
+      "scientific_name": "Rachycentron canadum",
+      "common_name_en": "Cobia",
+      "fishbase_code": 2751,
+      "inat_taxon_id": 49623
+    },
+    {
+      "id": 57,
+      "scientific_name": "Trachinotus carolinus",
+      "common_name_en": "Florida Pompano",
+      "fishbase_code": 1376,
+      "inat_taxon_id": 49607
+    },
+    {
+      "id": 58,
+      "scientific_name": "Centropomus undecimalis",
+      "common_name_en": "Common Snook",
+      "fishbase_code": 11262,
+      "inat_taxon_id": 64272
+    },
+    {
+      "id": 59,
+      "scientific_name": "Morone saxatilis",
+      "common_name_en": "Striped Bass",
+      "fishbase_code": 3904,
+      "inat_taxon_id": 60466
+    },
+    {
+      "id": 60,
+      "scientific_name": "Pomatomus saltatrix",
+      "common_name_en": "Bluefish",
+      "fishbase_code": 1477,
+      "inat_taxon_id": 49620
+    },
+    {
+      "id": 61,
+      "scientific_name": "Centropristis striata",
+      "common_name_en": "Black Sea Bass",
+      "fishbase_code": 3872,
+      "inat_taxon_id": 49629
+    },
+    {
+      "id": 62,
+      "scientific_name": "Paralichthys dentatus",
+      "common_name_en": "Summer Flounder",
+      "fishbase_code": 3462,
+      "inat_taxon_id": 64230
+    },
+    {
+      "id": 63,
+      "scientific_name": "Pseudopleuronectes americanus",
+      "common_name_en": "Winter Flounder",
+      "fishbase_code": 3464,
+      "inat_taxon_id": 64225
+    },
+    {
+      "id": 64,
+      "scientific_name": "Hippoglossus stenolepis",
+      "common_name_en": "Pacific Halibut",
+      "fishbase_code": 443,
+      "inat_taxon_id": 64220
+    },
+    {
+      "id": 65,
+      "scientific_name": "Atheresthes stomias",
+      "common_name_en": "Arrowtooth Flounder",
+      "fishbase_code": 3450,
+      "inat_taxon_id": 64207
+    },
+    {
+      "id": 66,
+      "scientific_name": "Microstomus pacificus",
+      "common_name_en": "Dover Sole",
+      "fishbase_code": 3461,
+      "inat_taxon_id": 64229
+    },
+    {
+      "id": 67,
+      "scientific_name": "Glyptocephalus zachirus",
+      "common_name_en": "Rex Sole",
+      "fishbase_code": 3456,
+      "inat_taxon_id": 64215
+    },
+    {
+      "id": 68,
+      "scientific_name": "Eopsetta jordani",
+      "common_name_en": "Petrale Sole",
+      "fishbase_code": 3453,
+      "inat_taxon_id": 64210
+    },
+    {
+      "id": 69,
+      "scientific_name": "Reinhardtius hippoglossoides",
+      "common_name_en": "Greenland Halibut",
+      "fishbase_code": 3465,
+      "inat_taxon_id": 64226
+    },
+    {
+      "id": 70,
+      "scientific_name": "Hoplostethus atlanticus",
+      "common_name_en": "Orange Roughy",
+      "fishbase_code": 3564,
+      "inat_taxon_id": 64302
+    },
+    {
+      "id": 71,
+      "scientific_name": "Lampris guttatus",
+      "common_name_en": "Opah (Moonfish)",
+      "fishbase_code": 5712,
+      "inat_taxon_id": 64298
+    },
+    {
+      "id": 72,
+      "scientific_name": "Macruronus novaezelandiae",
+      "common_name_en": "Blue Grenadier (Hoki)",
+      "fishbase_code": 3554,
+      "inat_taxon_id": null
+    },
+    {
+      "id": 73,
+      "scientific_name": "Dissostichus eleginoides",
+      "common_name_en": "Patagonian Toothfish (Chilean Sea Bass)",
+      "fishbase_code": 11894,
+      "inat_taxon_id": 64295
+    },
+    {
+      "id": 74,
+      "scientific_name": "Dissostichus mawsoni",
+      "common_name_en": "Antarctic Toothfish",
+      "fishbase_code": 11895,
+      "inat_taxon_id": 205607
+    },
+    {
+      "id": 75,
+      "scientific_name": "Beryx splendens",
+      "common_name_en": "Alfonsino",
+      "fishbase_code": 3563,
+      "inat_taxon_id": 64301
+    },
+    {
+      "id": 76,
+      "scientific_name": "Pollachius pollachius",
+      "common_name_en": "Pollack",
+      "fishbase_code": 74,
+      "inat_taxon_id": 82508
+    },
+    {
+      "id": 77,
+      "scientific_name": "Melanogrammus aeglefinus",
+      "common_name_en": "Haddock",
+      "fishbase_code": 70,
+      "inat_taxon_id": 82505
+    },
+    {
+      "id": 78,
+      "scientific_name": "Mugil cephalus",
+      "common_name_en": "Flathead Grey Mullet",
+      "fishbase_code": 1329,
+      "inat_taxon_id": 48498
+    },
+    {
+      "id": 79,
+      "scientific_name": "Sparus pagrus",
+      "common_name_en": "Red Porgy",
+      "fishbase_code": 1378,
+      "inat_taxon_id": 97074
+    }
+  ]
+}
