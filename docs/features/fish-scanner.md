@@ -173,8 +173,8 @@ lib/
         inaturalist_adapter.dart      # iNaturalist Vision API client
       models/
         detection_result.dart         # Bounding box + species + confidence
-        species_info.dart             # Scientific name + IUCN code + common names
-        iucn_category.dart            # Enum with colour + label + icon
+        species_info.dart             # Scientific name + Seafood Watch rating + common names
+        seafood_watch_rating.dart     # Enum with colour + label + icon
       data/
         species_db.dart               # SQLite access layer
         seed/
@@ -199,34 +199,29 @@ class DetectionResult {
 ```dart
 class SpeciesInfo {
   final String scientificName;
-  final IucnCategory iucnCategory;
+  final SeafoodWatchRating rating;
   final Map<String, String> commonNames; // ISO 639-1 code → name
   final int? fishbaseCode;
 }
 ```
 
-### `IucnCategory` (enum)
+### `SeafoodWatchRating` (enum)
 ```dart
-enum IucnCategory {
-  lc, nt, vu, en, cr, ew, ex, dd, ne;
+enum SeafoodWatchRating {
+  bestChoice, goodAlternative, avoid, notRated;
 
   Color get colour => switch(this) {
-    lc                    => const Color(0xFF4CAF50),
-    nt || vu              => const Color(0xFFFFC107),
-    en || cr || ew || ex  => const Color(0xFFF44336),
-    _                     => const Color(0xFF9E9E9E),
+    bestChoice      => const Color(0xFF4CAF50),
+    goodAlternative => const Color(0xFFFFC107),
+    avoid           => const Color(0xFFF44336),
+    _               => const Color(0xFF9E9E9E),
   };
 
   String get label => switch(this) {
-    lc  => 'LEAST CONCERN',
-    nt  => 'NEAR THREATENED',
-    vu  => 'VULNERABLE',
-    en  => 'ENDANGERED',
-    cr  => 'CRITICALLY ENDANGERED',
-    ew  => 'EXTINCT IN THE WILD',
-    ex  => 'EXTINCT',
-    dd  => 'DATA DEFICIENT',
-    ne  => 'NOT EVALUATED',
+    bestChoice      => 'BEST CHOICE',
+    goodAlternative => 'GOOD ALTERNATIVE',
+    avoid           => 'AVOID',
+    notRated        => 'NOT RATED',
   };
 }
 ```
