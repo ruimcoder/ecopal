@@ -57,6 +57,7 @@ enum SeafoodWatchRating {
         SeafoodWatchRating.notRated => const Color(0xFF9E9E9E),
       };
 
+  /// Internal identifier strings — display via AppLocalizations in the UI layer, not directly.
   String get label => switch (this) {
         SeafoodWatchRating.bestChoice => 'BEST CHOICE',
         SeafoodWatchRating.goodAlternative => 'GOOD ALTERNATIVE',

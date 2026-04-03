@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import '../features/fish_scanner/screens/fish_scanner_screen.dart';
+import 'routing/app_router.dart';
 import 'theme/app_theme.dart';
 
 class EcopalApp extends StatelessWidget {
@@ -25,7 +25,8 @@ class EcopalApp extends StatelessWidget {
         Locale('fr'),
         Locale('de'),
       ],
-      home: const FishScannerScreen(),
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
     );
   }

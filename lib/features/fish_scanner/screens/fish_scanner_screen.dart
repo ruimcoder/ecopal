@@ -14,6 +14,7 @@ class FishScannerScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
+          // TODO(#27): replace with AppLocalizations.of(context)!.scannerTitle
           'ecopal',
           style: TextStyle(
             color: Colors.white,
@@ -36,11 +37,13 @@ class FishScannerScreen extends StatelessWidget {
             Icon(Icons.camera_alt, color: Colors.white54, size: 64),
             SizedBox(height: 16),
             Text(
+              // TODO(#27): replace with AppLocalizations.of(context)!.cameraComingSoon
               'Camera coming soon',
               style: TextStyle(color: Colors.white54),
             ),
             SizedBox(height: 8),
             Text(
+              // TODO(#27): localise
               'Point at a fish counter to identify species',
               style: TextStyle(color: Colors.white38, fontSize: 12),
             ),
