@@ -126,7 +126,7 @@ scripts/ml/
 |--------|---------|--------------|
 | iNaturalist (CC0) | Public domain | ✅ Unrestricted |
 | iNaturalist (CC-BY) | Attribution required | ✅ OK for training; cite iNaturalist in model card |
-| iNaturalist (CC-BY-NC) | Non-commercial | ✅ OK for EcoPal (non-commercial training) |
+| iNaturalist (CC-BY-NC) | Non-commercial | ✅ OK for EcoPal (non-commercial training) — **remove `cc-by-nc` from `ALLOWED_LICENSES` if commercial deployment is pursued** |
 | Fishial.ai | Research license | ✅ Permitted for ML research; review current ToS before commercial deployment |
 | Self-collected supermarket photos | Internal / all rights | ✅ |
 

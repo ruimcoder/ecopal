@@ -26,6 +26,7 @@ import time
 from pathlib import Path
 
 import requests
+from PIL import Image as _PILImage
 from tqdm import tqdm
 
 # ---------------------------------------------------------------------------
@@ -33,6 +34,9 @@ from tqdm import tqdm
 # ---------------------------------------------------------------------------
 
 INAT_API_BASE = "https://api.inaturalist.org/v1"
+# EcoPal is a non-commercial open-source conservation project.
+# CC-BY-NC images are permitted for model training under these terms.
+# If commercial deployment is ever pursued, remove "cc-by-nc" from this list.
 ALLOWED_LICENSES = {"cc0", "cc-by", "cc-by-nc"}
 REQUEST_DELAY_S = 1.0  # polite delay between API calls
 MANIFEST_HEADERS = [
@@ -89,6 +93,39 @@ def load_existing_observation_ids(output_dir: Path, snake_name: str) -> set[str]
     return {p.stem for p in species_dir.glob("*.jpg")}
 
 
+def load_licenses(species_dir: Path) -> dict:
+    """Load licenses.json for a species directory, returning {obs_id: license_code}."""
+    licenses_path = species_dir / "licenses.json"
+    if not licenses_path.exists():
+        return {}
+    with open(licenses_path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def save_licenses(species_dir: Path, licenses: dict) -> None:
+    """Persist {obs_id: license_code} entries to licenses.json."""
+    species_dir.mkdir(parents=True, exist_ok=True)
+    licenses_path = species_dir / "licenses.json"
+    with open(licenses_path, "w", encoding="utf-8") as f:
+        json.dump(licenses, f, indent=2)
+
+
+def revalidate_licenses(species_dir: Path, licenses: dict) -> dict:
+    """Delete images whose license is no longer in ALLOWED_LICENSES and remove from dict."""
+    to_remove = [obs_id for obs_id, lic in licenses.items() if lic not in ALLOWED_LICENSES]
+    for obs_id in to_remove:
+        img_path = species_dir / f"{obs_id}.jpg"
+        if img_path.exists():
+            img_path.unlink()
+            log.warning(
+                "Deleted non-compliant image %s (license: %s)",
+                img_path,
+                licenses[obs_id],
+            )
+        del licenses[obs_id]
+    return licenses
+
+
 def fetch_observations(taxon_id: int, page: int, per_page: int) -> dict:
     """Call the iNaturalist observations endpoint and return parsed JSON."""
     url = f"{INAT_API_BASE}/observations"
@@ -115,6 +152,13 @@ def download_image(url: str, dest_path: Path) -> bool:
         with open(dest_path, "wb") as f:
             for chunk in resp.iter_content(chunk_size=8192):
                 f.write(chunk)
+        try:
+            with _PILImage.open(dest_path) as img:
+                img.verify()
+        except Exception as exc:
+            dest_path.unlink(missing_ok=True)
+            log.warning("Corrupt image deleted %s: %s", dest_path, exc)
+            return False
         return True
     except Exception as exc:
         log.warning("Failed to download %s: %s", url, exc)
@@ -155,7 +199,18 @@ def collect_species(
         return 0
 
     snake_name = scientific_to_snake(species["scientific_name"])
-    existing_ids = load_existing_observation_ids(output_dir, snake_name)
+    species_dir = output_dir / snake_name
+    licenses = load_licenses(species_dir)
+    original_license_count = len(licenses)
+    licenses = revalidate_licenses(species_dir, licenses)
+    if len(licenses) != original_license_count:
+        save_licenses(species_dir, licenses)
+
+    # Only count obs_ids that have a file on disk AND a valid license entry
+    existing_ids = {
+        obs_id for obs_id in licenses
+        if (species_dir / f"{obs_id}.jpg").exists()
+    }
     saved = 0
     page = 1
     per_page = min(200, max_per_species)  # iNat max per_page is 200
@@ -203,6 +258,8 @@ def collect_species(
 
                 dest_path = output_dir / snake_name / f"{obs_id}.jpg"
                 if download_image(image_url, dest_path):
+                    licenses[obs_id] = license_code
+                    save_licenses(species_dir, licenses)
                     manifest_writer.writerow(
                         {
                             "file_path": str(dest_path),
