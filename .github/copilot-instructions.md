@@ -256,6 +256,16 @@ A `prototype` branch is maintained as the always-installable demo build:
 **Rule:** After downloading any binary file (image, model, asset), validate it with the appropriate library (e.g. `PIL.Image.open(path).verify()` for images). On failure, delete the partial file and log a warning. Never assume a successful HTTP response means a valid file.  
 **Applies to:** All download scripts, asset fetchers, model downloaders.
 
+### LP-004 — Use explicit token for git push (environment-specific, 2025)
+**Context:** `git push` with the `gh auth git-credential` credential helper hangs indefinitely in Copilot shell sessions (the credential callback never completes).  
+**Rule:** When `git push` hangs with no output, use an explicit token URL instead:
+```powershell
+$token = gh auth token
+git push "https://$token@github.com/ruimcoder/ecopal.git" BRANCH:BRANCH
+```
+Never store the token in the remote URL permanently — use it only for the one-off push command.  
+**Applies to:** All git push operations in automated/Copilot shell sessions.
+
 ---
 
 ## Key Reminders
