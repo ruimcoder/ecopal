@@ -70,7 +70,8 @@ jobs:
     name: Firebase App Distribution
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.FIREBASE_APP_ID != ''
+    continue-on-error: true  # Firebase secrets not yet configured
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout
