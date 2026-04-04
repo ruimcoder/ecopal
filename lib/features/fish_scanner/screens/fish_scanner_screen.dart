@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -5,21 +7,30 @@ import 'package:permission_handler/permission_handler.dart';
 import '../models/detection_result.dart';
 import '../services/camera_service.dart';
 import '../services/frame_processor.dart';
+import '../services/inference_service.dart';
 import '../widgets/species_info_card.dart';
 
 /// Main Fish Scanner screen.
 ///
 /// Displays a full-bleed [CameraPreview] with a transparent overlay [Stack]
-/// for bounding boxes (painted in Issue #22) and a bottom info panel showing
-/// the detected species name, common name, and rating badge.
+/// for bounding boxes (drawn by [FishOverlayPainter]) and a bottom info panel
+/// showing the detected species name, common name, and rating badge.
+///
+/// [inferenceService] is constructor-injected so tests can supply a mock.
+/// Defaults to a real [InferenceService] (mock-data mode until Issue #13).
 ///
 /// Manages camera lifecycle through [WidgetsBindingObserver]: pauses the image
 /// stream when the app is backgrounded and resumes it on foreground.
 class FishScannerScreen extends StatefulWidget {
-  const FishScannerScreen({super.key, CameraService? cameraService})
-      : _cameraService = cameraService;
+  const FishScannerScreen({
+    super.key,
+    CameraService? cameraService,
+    InferenceService? inferenceService,
+  })  : _cameraService = cameraService,
+        _inferenceService = inferenceService;
 
   final CameraService? _cameraService;
+  final InferenceService? _inferenceService;
 
   @override
   State<FishScannerScreen> createState() => _FishScannerScreenState();
@@ -29,10 +40,15 @@ class _FishScannerScreenState extends State<FishScannerScreen>
     with WidgetsBindingObserver {
   late final CameraService _cameraService;
   late final FrameProcessor _frameProcessor;
+  late final InferenceService _inferenceService;
   late final Future<void> _initFuture;
 
-  /// Stub detection result shown in the bottom info panel.
-  /// TODO(#22): replace with live [DetectionResult] from ML pipeline.
+  StreamSubscription<ProcessedFrame>? _frameSubscription;
+
+  /// Latest inference result from the ML pipeline.
+  InferenceResult? _inferenceResult;
+
+  // TODO(#27): replace hardcoded strings with AppLocalizations
   static const SpeciesInfo _stubSpecies = SpeciesInfo(
     scientificName: 'Thunnus thynnus',
     rating: SeafoodWatchRating.avoid,
@@ -44,16 +60,32 @@ class _FishScannerScreenState extends State<FishScannerScreen>
     super.initState();
     _cameraService = widget._cameraService ?? CameraService();
     _frameProcessor = FrameProcessor();
+    _inferenceService = widget._inferenceService ?? InferenceService();
     WidgetsBinding.instance.addObserver(this);
-    _initFuture = _initCamera();
+    _initFuture = _initPipeline();
   }
 
-  Future<void> _initCamera() async {
+  /// Initialises camera, inference service, and wires the frame pipeline.
+  ///
+  /// [InferenceService.init] is idempotent (LP-001) — safe to call here.
+  Future<void> _initPipeline() async {
+    await _inferenceService.init();
     await _cameraService.initialize();
     if (_cameraService.errorMessage.value == null) {
       _frameProcessor.start(_cameraService.imageStream);
+      _frameSubscription = _frameProcessor.frames.listen(_onFrame);
     }
     _cameraService.errorMessage.addListener(_onCameraError);
+  }
+
+  /// Processes each [ProcessedFrame] through inference and refreshes the UI.
+  Future<void> _onFrame(ProcessedFrame frame) async {
+    try {
+      final result = await _inferenceService.infer(frame);
+      if (mounted) setState(() => _inferenceResult = result);
+    } on Exception catch (e) {
+      debugPrint('FishScannerScreen: inference error — $e');
+    }
   }
 
   @override
@@ -61,12 +93,14 @@ class _FishScannerScreenState extends State<FishScannerScreen>
     switch (state) {
       case AppLifecycleState.paused:
       case AppLifecycleState.inactive:
+        _frameSubscription?.pause();
         _frameProcessor.stop();
         _cameraService.stopImageStream();
       case AppLifecycleState.resumed:
         _cameraService.startImageStream();
         if (_cameraService.controller?.value.isInitialized ?? false) {
           _frameProcessor.start(_cameraService.imageStream);
+          _frameSubscription?.resume();
         }
       default:
         break;
@@ -94,7 +128,9 @@ class _FishScannerScreenState extends State<FishScannerScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _cameraService.errorMessage.removeListener(_onCameraError);
+    _frameSubscription?.cancel();
     _frameProcessor.dispose();
+    _inferenceService.dispose();
     _cameraService.dispose();
     super.dispose();
   }
@@ -162,6 +198,7 @@ class _FishScannerScreenState extends State<FishScannerScreen>
 
           return _ScannerView(
             controller: controller,
+            detections: _inferenceResult?.detections ?? const [],
             stubSpecies: _stubSpecies,
             errorMessage: _cameraService.errorMessage,
             colorScheme: colorScheme,
@@ -176,6 +213,7 @@ class _FishScannerScreenState extends State<FishScannerScreen>
     await _cameraService.initialize();
     if (_cameraService.errorMessage.value == null) {
       _frameProcessor.start(_cameraService.imageStream);
+      _frameSubscription ??= _frameProcessor.frames.listen(_onFrame);
     }
   }
 }
@@ -267,6 +305,7 @@ class _ErrorView extends StatelessWidget {
 class _ScannerView extends StatelessWidget {
   const _ScannerView({
     required this.controller,
+    required this.detections,
     required this.stubSpecies,
     required this.errorMessage,
     required this.colorScheme,
@@ -274,8 +313,11 @@ class _ScannerView extends StatelessWidget {
 
   final CameraController controller;
 
-  /// Stub species info shown until Issue #22 wires real detections.
-  /// TODO(#22): replace with a stream of live [DetectionResult]s.
+  /// Live detections from the most recent inference run.
+  final List<DetectionResult> detections;
+
+  /// Fallback species shown in the info card when [detections] is empty.
+  // TODO(#27): replace hardcoded strings with AppLocalizations
   final SpeciesInfo stubSpecies;
 
   final ValueNotifier<String?> errorMessage;
@@ -296,16 +338,20 @@ class _ScannerView extends StatelessWidget {
           );
         }
 
+        // Resolve species: first live detection or stub fallback.
+        final activeSpecies =
+            detections.isNotEmpty ? detections.first.speciesInfo : null;
+        final displaySpecies = activeSpecies ?? stubSpecies;
+
         return Stack(
           fit: StackFit.expand,
           children: [
             // Layer 1 — full-bleed camera preview.
             CameraPreview(controller),
 
-            // Layer 2 — bounding box overlay (painter implemented in Issue #22).
-            // TODO(#22): replace with FishOverlayPainter CustomPaint widget.
-            IgnorePointer(
-              child: Container(color: Colors.transparent),
+            // Layer 2 — bounding-box overlay; TODO(#22): wire FishOverlayPainter.
+            const IgnorePointer(
+              child: CustomPaint(),
             ),
 
             // Layer 3 — bottom info panel.
@@ -317,7 +363,7 @@ class _ScannerView extends StatelessWidget {
                 top: false,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  child: SpeciesInfoCard(speciesInfo: stubSpecies),
+                  child: SpeciesInfoCard(speciesInfo: displaySpecies),
                 ),
               ),
             ),
