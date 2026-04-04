@@ -1,7 +1,23 @@
+// Data sources (CC BY):
+// - OSPAR Commission Threatened & Declining Species list
+//   https://www.ospar.org/work-areas/bdc/species-habitats/list-of-threatened-declining-species-habitats
+// - HELCOM Red List of Baltic Sea species
+//   https://helcom.fi/baltic-sea-trends/biodiversity/red-list-of-species/
+
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-enum RegionalStatus { osparThreatened, helcomRedListed, notListed }
+enum RegionalStatus {
+  osparThreatened,
+  helcomRedListed,
+  notListed;
+
+  String get i18nKey => switch (this) {
+    RegionalStatus.osparThreatened => 'regionalBadgeOsparThreatened',
+    RegionalStatus.helcomRedListed => 'regionalBadgeHelcomRedListed',
+    RegionalStatus.notListed       => 'regionalBadgeNotListed',
+  };
+}
 
 class RegionalAdapter {
   final _ospar = <String>{};

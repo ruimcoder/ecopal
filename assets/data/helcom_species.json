@@ -1,5 +1,3 @@
-// CC BY — HELCOM Red List of Baltic Sea species in danger of becoming extinct.
-// Source: https://helcom.fi/baltic-sea-trends/biodiversity/red-list-of-species/
 [
   {"scientific_name": "Acipenser oxyrinchus", "status": "red_listed", "region": "Baltic Sea"},
   {"scientific_name": "Anguilla anguilla", "status": "red_listed", "region": "Baltic Sea"},

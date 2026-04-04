@@ -1,5 +1,3 @@
-// CC BY — OSPAR Commission, Quality Status Report & Threatened/Declining Species lists.
-// Source: https://www.ospar.org/work-areas/bdc/species-habitats/list-of-threatened-declining-species-habitats
 [
   {"scientific_name": "Gadus morhua", "status": "threatened", "region": "NE Atlantic"},
   {"scientific_name": "Anguilla anguilla", "status": "threatened", "region": "NE Atlantic"},
