@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build & Test (Android)
@@ -49,10 +52,10 @@ jobs:
         run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze --fatal-warnings
+        run: flutter analyze --fatal-warnings --no-pub
 
       - name: Test
-        run: flutter test
+        run: flutter test --no-pub
 
       - name: Build debug APK
         run: flutter build apk --debug
