@@ -1,0 +1,24 @@
+// CC BY — OSPAR Commission, Quality Status Report & Threatened/Declining Species lists.
+// Source: https://www.ospar.org/work-areas/bdc/species-habitats/list-of-threatened-declining-species-habitats
+[
+  {"scientific_name": "Gadus morhua", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Anguilla anguilla", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Squalus acanthias", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Cetorhinus maximus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Lamna nasus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Dipturus batis", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Rostroraja alba", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Squatina squatina", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Hippocampus hippocampus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Hippocampus guttulatus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Alosa alosa", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Alosa fallax", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Acipenser sturio", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Petromyzon marinus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Salmo salar", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Thunnus thynnus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Xiphias gladius", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Scomber scombrus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Sprattus sprattus", "status": "threatened", "region": "NE Atlantic"},
+  {"scientific_name": "Clupea harengus", "status": "threatened", "region": "NE Atlantic"}
+]

@@ -1,0 +1,24 @@
+// CC BY — HELCOM Red List of Baltic Sea species in danger of becoming extinct.
+// Source: https://helcom.fi/baltic-sea-trends/biodiversity/red-list-of-species/
+[
+  {"scientific_name": "Acipenser oxyrinchus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Anguilla anguilla", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Coregonus lavaretus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Coregonus albula", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Salmo trutta", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Salmo salar", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Thymallus thymallus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Osmerus eperlanus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Alosa fallax", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Clupea harengus membras", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Gadus morhua", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Zoarces viviparus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Cottus gobio", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Petromyzon marinus", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Lampetra fluviatilis", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Lampetra planeri", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Nerophis ophidion", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Syngnathus typhle", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Lota lota", "status": "red_listed", "region": "Baltic Sea"},
+  {"scientific_name": "Sander lucioperca", "status": "red_listed", "region": "Baltic Sea"}
+]
