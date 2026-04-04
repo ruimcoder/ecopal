@@ -22,7 +22,7 @@ class SpeciesCacheDb {
   static const String _createSpeciesCache = '''
     CREATE TABLE species_cache (
       scientific_name TEXT PRIMARY KEY,
-      sw_rating       TEXT NOT NULL,
+      seafood_watch_rating TEXT NOT NULL,
       fishbase_code   INTEGER,
       fetched_at      INTEGER NOT NULL,
       expires_at      INTEGER NOT NULL
@@ -44,6 +44,7 @@ class SpeciesCacheDb {
   /// `getApplicationDocumentsDirectory()/ecopal.db`.
   /// Pass [inMemoryDatabasePath] from `sqflite_common_ffi` for testing.
   Future<void> init({String? dbPath}) async {
+    if (_db != null) return;
     final resolvedPath = dbPath ?? await _defaultDbPath();
     _db = await openDatabase(
       resolvedPath,
@@ -96,7 +97,7 @@ class SpeciesCacheDb {
 
     return SpeciesInfo(
       scientificName: scientificName,
-      rating: _parseRating(row['sw_rating'] as String),
+      rating: _parseRating(row['seafood_watch_rating'] as String),
       commonNames: commonNames,
       fishbaseCode: row['fishbase_code'] as int?,
     );
@@ -134,7 +135,7 @@ class SpeciesCacheDb {
       'species_cache',
       {
         'scientific_name': species.scientificName,
-        'sw_rating': species.rating.name,
+        'seafood_watch_rating': species.rating.name,
         'fishbase_code': species.fishbaseCode,
         'fetched_at': fetchedAt,
         'expires_at': expiresAt,
