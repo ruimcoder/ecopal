@@ -44,27 +44,30 @@ Both are available via REST APIs, but neither is designed for real-time, per-fra
 
 ## Caching Strategy
 
+> ⚠️ **DO NOT IMPLEMENT** — The sequence diagram below referenced IUCN API which is commercially prohibited.
+> The approved caching strategy uses Seafood Watch as the primary source. See [ADR-004](./004-conservation-data-sources.md) for the correct implementation.
+
 ```mermaid
 sequenceDiagram
     participant App
     participant SQLite as Local SQLite Cache
-    participant IUCN as IUCN API
+    participant SW as Seafood Watch API
     participant FB as FishBase API
 
     App->>SQLite: lookup(scientificName)
     alt Cache hit (TTL valid)
-        SQLite-->>App: {iucnCode, commonNames}
+        SQLite-->>App: {swRating, commonNames}
     else Cache miss or expired
-        App->>IUCN: GET /species/name/{name}
-        IUCN-->>App: {category}
+        App->>SW: GET /recommendations/{name}
+        SW-->>App: {rating}
         App->>FB: GET /species + /common_names
         FB-->>App: {commonNames[]}
         App->>SQLite: store(scientificName, data, TTL=7days)
-        SQLite-->>App: {iucnCode, commonNames}
+        SQLite-->>App: {swRating, commonNames}
     end
 ```
 
-**Cache TTL:** 7 days for IUCN status (conservation status changes infrequently). Common names are effectively static; cache indefinitely until app update.
+**Cache TTL:** 7 days for Seafood Watch rating (sustainability assessments change infrequently). Common names are effectively static; cache indefinitely until app update.
 
 **Pre-seeded cache:** The APK ships with a SQLite database pre-populated with the top 200 commercial fish species. This ensures offline capability from first launch without any API calls.
 
@@ -75,10 +78,10 @@ sequenceDiagram
 ```sql
 CREATE TABLE species_cache (
     scientific_name   TEXT PRIMARY KEY,
-    iucn_code         TEXT NOT NULL,         -- LC, NT, VU, EN, CR, EW, EX, DD, NE
+    sw_rating         TEXT NOT NULL,            -- bestChoice, goodAlternative, avoid, notRated
     fishbase_code     INTEGER,
-    fetched_at        INTEGER NOT NULL,       -- Unix timestamp
-    expires_at        INTEGER NOT NULL        -- Unix timestamp
+    fetched_at        INTEGER NOT NULL,         -- Unix timestamp
+    expires_at        INTEGER NOT NULL          -- Unix timestamp
 );
 
 CREATE TABLE common_names (
@@ -105,5 +108,5 @@ CREATE TABLE common_names (
 
 - A pre-seeded SQLite database must be generated as part of the build pipeline and bundled in the APK.
 - The build pipeline must include a script to refresh the seed database when a new app version is released.
-- IUCN API token must be stored server-side (not embedded in the app binary). For MVP, it may be proxied through a minimal backend function (e.g. a single Cloud Function / Lambda). See security NFRs.
+- ~~IUCN API token must be stored server-side.~~ — **Not applicable. Seafood Watch API is used instead. See ADR-004 for security considerations.**
 - FishBase API availability risk is mitigated by the pre-seeded cache; the app degrades gracefully to scientific name display only if FishBase is unreachable.
