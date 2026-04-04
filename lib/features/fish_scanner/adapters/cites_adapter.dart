@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -151,10 +152,10 @@ class CitesAdapter {
       {'name': scientificName},
     );
 
-    final response = await _http.get(
-      uri,
-      headers: {'X-Authentication-Token': apiToken},
-    );
+    try {
+      final response = await _http
+          .get(uri, headers: {'X-Authentication-Token': apiToken})
+          .timeout(const Duration(seconds: 10));
 
     if (response.statusCode != 200) return CitesAppendix.notListed;
 
@@ -174,7 +175,10 @@ class CitesAdapter {
       );
       if (a.index < result.index) result = a;
     }
-    return result;
+      return result;
+    } on TimeoutException {
+      return CitesAppendix.notListed;
+    }
   }
 
   // ---------------------------------------------------------------------------

@@ -60,7 +60,10 @@ class SpeciesCacheDb {
   /// additional tables in the same file (e.g. [CitesAdapter]).
   ///
   /// Callers must ensure [init] has been called first.
-  Database get rawDatabase => _db!;
+  Database get rawDatabase {
+    assert(_db != null, 'SpeciesCacheDb.init() must be called before accessing rawDatabase');
+    return _db!;
+  }
 
   /// Returns the default production database path.
   Future<String> _defaultDbPath() async {
