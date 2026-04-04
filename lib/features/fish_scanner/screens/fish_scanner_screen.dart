@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../models/detection_result.dart';
+import '../painters/fish_overlay_painter.dart';
 import '../services/camera_service.dart';
 import '../services/frame_processor.dart';
 import '../services/inference_service.dart';
@@ -343,15 +344,23 @@ class _ScannerView extends StatelessWidget {
             detections.isNotEmpty ? detections.first.speciesInfo : null;
         final displaySpecies = activeSpecies ?? stubSpecies;
 
+        // Camera preview dimensions for bounding-box scaling.
+        final previewSize = controller.value.previewSize ?? Size.zero;
+
         return Stack(
           fit: StackFit.expand,
           children: [
             // Layer 1 — full-bleed camera preview.
             CameraPreview(controller),
 
-            // Layer 2 — bounding-box overlay; TODO(#22): wire FishOverlayPainter.
-            const IgnorePointer(
-              child: CustomPaint(),
+            // Layer 2 — bounding-box overlay painted by FishOverlayPainter.
+            IgnorePointer(
+              child: CustomPaint(
+                painter: FishOverlayPainter(
+                  detections: detections,
+                  previewSize: previewSize,
+                ),
+              ),
             ),
 
             // Layer 3 — bottom info panel.
