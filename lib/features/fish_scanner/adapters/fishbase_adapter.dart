@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../data/species_cache_db.dart';
@@ -37,8 +38,8 @@ class FishBaseAdapter {
       if (cached != null && cached.commonNames.isNotEmpty) {
         return Map<String, String>.from(cached.commonNames);
       }
-    } catch (_) {
-      // Cache unavailable — fall through to network
+    } on Exception catch (e) {
+      debugPrint('FishBaseAdapter: cache lookup failed: $e');
     }
 
     try {
@@ -63,7 +64,8 @@ class FishBaseAdapter {
 
       await _cacheNames(scientificName, specCode, commonNames);
       return commonNames;
-    } catch (_) {
+    } on Exception catch (e) {
+      debugPrint('FishBaseAdapter: common names fetch failed for $scientificName: $e');
       return {'en': scientificName};
     }
   }
@@ -93,7 +95,8 @@ class FishBaseAdapter {
       if (data == null || data.isEmpty) return null;
 
       return (data.first as Map<String, dynamic>)['SpecCode'] as int?;
-    } catch (_) {
+    } on Exception catch (e) {
+      debugPrint('FishBaseAdapter: specCode lookup failed for $scientificName: $e');
       return null;
     }
   }
@@ -126,8 +129,8 @@ class FishBaseAdapter {
           commonNames[isoCode] = name;
         }
       }
-    } catch (_) {
-      // Malformed response — return whatever was parsed
+    } on Exception catch (e) {
+      debugPrint('FishBaseAdapter: JSON parse failed: $e');
     }
     return commonNames;
   }
@@ -148,8 +151,8 @@ class FishBaseAdapter {
           fishbaseCode: specCode,
         ),
       );
-    } catch (_) {
-      // Cache write failure is non-fatal
+    } on Exception catch (e) {
+      debugPrint('FishBaseAdapter: cache write failed: $e');
     }
   }
 
