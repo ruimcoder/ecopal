@@ -4,11 +4,34 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Factory for creating a [CameraController] from a [CameraDescription].
+typedef CameraControllerFactory = CameraController Function(
+  CameraDescription description,
+);
+
+/// Provides a [PermissionStatus] for the camera permission.
+typedef PermissionRequester = Future<PermissionStatus> Function();
+
 /// Manages the device camera lifecycle for the Fish Scanner feature.
 ///
 /// Callers must call [initialize] before accessing [controller] or
 /// [imageStream], and [dispose] when the camera is no longer needed.
+///
+/// The optional [cameras], [controllerFactory], and [permissionRequester]
+/// parameters exist solely to enable unit testing without real hardware.
 class CameraService {
+  CameraService({
+    List<CameraDescription>? cameras,
+    CameraControllerFactory? controllerFactory,
+    PermissionRequester? permissionRequester,
+  })  : _injectedCameras = cameras,
+        _controllerFactory = controllerFactory,
+        _permissionRequester = permissionRequester;
+
+  final List<CameraDescription>? _injectedCameras;
+  final CameraControllerFactory? _controllerFactory;
+  final PermissionRequester? _permissionRequester;
+
   CameraController? _controller;
   final _imageStreamController = StreamController<CameraImage>.broadcast();
   final ValueNotifier<String?> errorMessage = ValueNotifier(null);
@@ -20,7 +43,7 @@ class CameraService {
 
   /// Emits raw [CameraImage] frames from the active camera.
   ///
-  /// TODO(#XX): move frame processing into a separate Isolate to keep UI jank-free.
+  /// TODO(#11): move frame processing into a separate Isolate to keep UI jank-free.
   Stream<CameraImage> get imageStream => _imageStreamController.stream;
 
   /// Requests camera permission and initialises the [CameraController].
@@ -28,14 +51,20 @@ class CameraService {
   /// Throws [CameraException] if the camera cannot be opened.
   Future<void> initialize() async {
     try {
-      final status = await Permission.camera.request();
+      final PermissionStatus status;
+      final requester = _permissionRequester;
+      if (requester != null) {
+        status = await requester();
+      } else {
+        status = await Permission.camera.request();
+      }
       if (!status.isGranted) {
         // TODO(#27): AppLocalizations — camera permission denied message
         errorMessage.value = 'Camera permission denied';
         return;
       }
 
-      _cameras = await availableCameras();
+      _cameras = _injectedCameras ?? await availableCameras();
       if (_cameras.isEmpty) {
         // TODO(#27): AppLocalizations — no cameras available message
         errorMessage.value = 'No cameras available on this device';
@@ -61,12 +90,15 @@ class CameraService {
       await previous.dispose();
     }
 
-    final controller = CameraController(
-      description,
-      ResolutionPreset.high,
-      enableAudio: false,
-      imageFormatGroup: ImageFormatGroup.yuv420,
-    );
+    final factory = _controllerFactory;
+    final controller = factory != null
+        ? factory(description)
+        : CameraController(
+            description,
+            ResolutionPreset.high,
+            enableAudio: false,
+            imageFormatGroup: ImageFormatGroup.yuv420,
+          );
     _controller = controller;
 
     await controller.initialize();
