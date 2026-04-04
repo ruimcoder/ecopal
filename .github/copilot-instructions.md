@@ -266,6 +266,27 @@ git push "https://$token@github.com/ruimcoder/ecopal.git" BRANCH:BRANCH
 Never store the token in the remote URL permanently — use it only for the one-off push command.  
 **Applies to:** All git push operations in automated/Copilot shell sessions.
 
+
+### LP-005 — 15-second timeout on all cloud API calls (PR #14, 2025)
+**Context:** Cloud fallback calls (e.g. iNaturalist) must not block the UI indefinitely on slow networks.
+**Rule:** Chain `.timeout(const Duration(seconds: 15))` on every outbound HTTP call. Catch `TimeoutException` explicitly *before* the generic `on Exception catch (e)` handler so it can be logged distinctly. Never use `catch (_)`.
+```dart
+await client.send(request).timeout(const Duration(seconds: 15));
+// ...
+} on TimeoutException catch (e) {
+  debugPrint('...: request timed out — $e');
+  return null;
+} on Exception catch (e) {
+  debugPrint('...: request failed — $e');
+  return null;
+}
+```
+**Applies to:** All HTTP calls to external APIs (iNaturalist, Seafood Watch, CITES, etc.).
+
+### LP-006 — No `//` comments inside JSON (PR #48, 2025)
+**Context:** A seed data file contained `//` comments inside a JSON body, causing parse errors at runtime.
+**Rule:** JSON does not support comments. Never include `//` or `/* */` comments anywhere inside a JSON file or a JSON string literal. Use a companion `.md` or a `_comment` key if annotation is needed.
+**Applies to:** All `.json` files, inline `jsonEncode(...)` calls, and HTTP response fixtures in tests.
 ---
 
 ## Key Reminders
