@@ -63,4 +63,10 @@ void main() {
     // Gadus morhua appears in both OSPAR and HELCOM lists; OSPAR takes priority
     expect(adapter.getStatus('Gadus morhua'), RegionalStatus.osparThreatened);
   });
+
+  test('RegionalStatus.i18nKey returns correct keys', () {
+    expect(RegionalStatus.osparThreatened.i18nKey, 'regionalBadgeOsparThreatened');
+    expect(RegionalStatus.helcomRedListed.i18nKey, 'regionalBadgeHelcomRedListed');
+    expect(RegionalStatus.notListed.i18nKey, 'regionalBadgeNotListed');
+  });
 }
